@@ -131,13 +131,11 @@ DECL_TASK(task)
 	int term_id = *(int *)param;
 
 	session.term[term_id].status = STATUS_NOT_YET;
+	// if term_id == 1
+	while(term_id && on_demand && session.term[THE_OTHER(term_id)].status == STATUS_NOT_YET)
+		thread_sleep(10);
 	if(session.term[term_id].ip)
-	{
-		// if term_id == 1
-		while(term_id && on_demand && session.term[THE_OTHER(term_id)].status == STATUS_NOT_YET)
-			thread_sleep(10);
 		session.term[term_id].fd = start_client(session.term[term_id].ip, session.term[term_id].port);
-	}
 	else
 		session.term[term_id].fd = start_server(session.term[term_id].port);
 
