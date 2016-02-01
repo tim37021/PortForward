@@ -15,7 +15,7 @@ typedef pthread_t thread_handle_t;
 
 void thread_create(thread_handle_t *handle, void *task, void *param);
 void thread_join(thread_handle_t handle);
-void close_handle(HANDLE handle);
+void close_handle(thread_handle_t handle);
 void thread_sleep(long milisec);
 
 #endif

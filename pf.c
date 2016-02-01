@@ -72,6 +72,7 @@ SOCKET start_server(int port)
 		return INVALID_SOCKET;
 	}
 
+	print_msg("Listen on port %d", port);
 	if(listen(lis_sock, LISTEN_BAG)==-1)
 	{
 		closesocket(lis_sock);
@@ -161,6 +162,9 @@ DECL_TASK(task)
 
 int main(int argc, char *argv[])
 {
+	init_term(&session.term[0]);
+	init_term(&session.term[1]);
+
 	if(!parse_args(argc, argv))
 	{
 		printf("Usage: pf <term> <term>\n");
@@ -171,9 +175,6 @@ int main(int argc, char *argv[])
 	}
 
 	startup_network();
-
-	init_term(&session.term[0]);
-	init_term(&session.term[0]);
 
 	int id1=0, id2=1;
 	thread_handle_t handles[2]; 

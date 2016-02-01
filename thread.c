@@ -13,7 +13,7 @@ void thread_join(thread_handle_t handle)
 #if WIN32
 	WaitForSingleObject(handle, INFINITE);
 #else
-	pthread_join(handle);
+	pthread_join(handle, NULL);
 #endif
 }
 
@@ -32,3 +32,4 @@ void thread_sleep(long milisec)
 	usleep(milisec*1000);
 #endif
 }
+
