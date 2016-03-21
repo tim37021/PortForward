@@ -7,7 +7,9 @@ typedef HANDLE thread_handle_t;
 #define DECL_TASK(name) DWORD WINAPI name(LPVOID param)
 #define EXIT_TASK() return 0;
 #else
+#define _BSD_SOURCE
 #include <pthread.h>
+#include <unistd.h>
 typedef pthread_t thread_handle_t;
 #define DECL_TASK(name) void *name(void *param)
 #define EXIT_TASK() return NULL;
