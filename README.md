@@ -9,11 +9,11 @@ This project is still active.
 ### How to Compile
 for windows:
 
-    gcc -static -Wall -o pf.exe pf.c thread.c network.c -lws2_32
+    gcc -static -Wall -o pf.exe main.c thread.c network.c -lws2_32
 
 for Linux/FreeBSD:
 
-    gcc -static -o pf pf.c thread.c network.c
+    make
 
 ### Example Usage
 Forwarding remote desktop(RDP) need two commands, pf close immediately when one side of connections break. However, RDP actually connect twice. The first is for authentication .
