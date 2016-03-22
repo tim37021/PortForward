@@ -11,7 +11,7 @@ struct session_t session;
 int quiet = 0;
 int on_demand = 0;
 
-int parse_args(int argc, char *argv[])
+static int parse_args(int argc, char *argv[])
 {
 	int i;
 	int t=0;
@@ -41,7 +41,7 @@ int parse_args(int argc, char *argv[])
 	return t==2;
 }
 
-void print_msg(const char *msg, ...)
+static void print_msg(const char *msg, ...)
 {
 	va_list args;
 	va_start (args, msg);
@@ -53,7 +53,7 @@ void print_msg(const char *msg, ...)
 	va_end(args);
 }
 
-SOCKET start_server(int port)
+static SOCKET start_server(int port)
 {
 
 	struct sockaddr_in service;
@@ -88,7 +88,7 @@ SOCKET start_server(int port)
 	return client;
 
 }
-SOCKET start_client(const char *ip, int port)
+static SOCKET start_client(const char *ip, int port)
 {
 	struct sockaddr_in service;
 	service.sin_family = AF_INET;
@@ -106,7 +106,7 @@ SOCKET start_client(const char *ip, int port)
 	return sock;
 }
 
-void data_forward(SOCKET fd_in, SOCKET fd_out)
+static void data_forward(SOCKET fd_in, SOCKET fd_out)
 {
 	int len;
 	char *buf = malloc(BUFFER_SIZE);
@@ -119,14 +119,14 @@ void data_forward(SOCKET fd_in, SOCKET fd_out)
 	free(buf);
 }
 
-void init_term(struct terminal_t *term)
+static void init_term(struct terminal_t *term)
 {
 	term->ip = NULL;
 	term->port = 0;
 	term->status = STATUS_NOT_YET;
 }
 
-DECL_TASK(task)
+static DECL_TASK(task)
 {
 	int term_id = *(int *)param;
 
