@@ -1,3 +1,4 @@
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,30 +14,49 @@ int on_demand = 0;
 
 static int parse_args(int argc, char *argv[])
 {
-	int i;
+	char *short_options = "c:dhl:q";
+	struct option long_options[] = {
+		{"connect-to-ip", required_argument, NULL, 'c'},
+		{"demand", no_argument, NULL, 'd'},
+		{"help", no_argument, NULL, 'h'},
+		{"listen-on-port", required_argument, NULL, 'l'},
+		{"quiet", no_argument, NULL, 'q'},
+		{NULL, 0, NULL, 0}
+	};
+	char c;
+	char *pos = NULL;
 	int t=0;
-	for(i=0; argv[i]; i++)
-	{
-		if(strcmp(argv[i], "-l")==0)
-		{
-			if(i+1>=argc)
+	while (1) {
+		c = getopt_long(argc, argv, short_options, long_options, NULL);
+		if (c == -1)
+			break;
+		switch (c) {
+			case 'c':
+				if ((pos = strchr(optarg, ':')) == NULL) {
+					printf("invalid: Connecting ip has no port number.\n");
+					exit(1);
+				}
+				*pos = '\0';
+				session.term[t].ip = (char *)optarg;
+				session.term[t].port = atoi(pos+1);
+				t++;
+				break;
+			case 'd':
+				on_demand = 1;
+				break;
+			case 'h':
 				return 0;
-			session.term[t].ip = NULL;
-			session.term[t].port = atoi(argv[i+1]);
-			t++;
-		}
-		if(strcmp(argv[i], "-c")==0)
-		{
-			if(i+2>=argc)
+			case 'l':
+				session.term[t].ip = NULL;
+				session.term[t].port = atoi(optarg);
+				t++;
+				break;
+			case 'q':
+				quiet = 1;
+				break;
+			default:
 				return 0;
-			session.term[t].ip = argv[i+1];
-			session.term[t].port = atoi(argv[i+2]);
-			t++;
 		}
-		if(strcmp(argv[i], "-q")==0)
-			quiet = 1;
-		if(strcmp(argv[i], "-d")==0)
-			on_demand = 1;
 	}
 	return t==2;
 }
@@ -165,10 +185,17 @@ int main(int argc, char *argv[])
 
 	if(!parse_args(argc, argv))
 	{
-		printf("Usage: pf <term> <term>\n");
-		printf("-l [port] - Listen on port\n");
-		printf("-c [ip] [port] - Connect to ip\n");
-		printf("Example: pf -l 3389 -c 192.168.0.1 3389\n");
+		printf("Usage: pf <term> <term>\n\n");
+		printf("--listen-on-port [port]\n");
+		printf("-l [port]\n");
+		printf("    Listen on port\n\n");
+		printf("--connect-to-ip [ip]:[port]\n");
+		printf("-c [ip]:[port]\n");
+		printf("    Connect to ip\n\n");
+		printf("--quiet\n");
+		printf("-q\n");
+		printf("    Don't print messages\n\n");
+		printf("Example: pf -l 3389 -c 192.168.0.1:3389\n");
 		return 1;
 	}
 
