@@ -1,10 +1,6 @@
 # Port Forward
 
-pf is a software NAT. I developed it for some hacking purpose originally. It can forward data from one terminal to the other. The terminals need not be clients, they can both be servers. cool? This is useful when the target does not have public IP or when firewall blocks any incoming connection. pf can run on multiple platform such as UNIX-like and even very old Windows machine. Hope you like it.
-
-### Development
-
-This project is still active.
+pf is all about port forwarding. I developed it for some hacking purpose originally. It can forward data from one terminal to the other. The terminals are not necessary to be TCP clients, they can both be servers. cool? This is useful when the target does not have public IP or when firewall blocks any incoming connection. pf can run on multiple platform such as UNIX-like and even very old Windows machine. Hope you like it.
 
 ### How to Compile
 for windows:
